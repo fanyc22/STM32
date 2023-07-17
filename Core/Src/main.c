@@ -95,6 +95,7 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   HAL_DAC_Start(&hdac, DAC_CHANNEL_1); // 使能DAC
+  HAL_DAC_Start(&hdac, DAC_CHANNEL_2); // 使能DAC
   delay_init();
   /* USER CODE END 2 */
 
@@ -106,13 +107,23 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    for (int i = 0; i < 10; ++i)
+    get_ultrasound();
+    delay_ms(10);       // proactively delay 10ms, waiting for the `distance` value to renew
+    int DAC_min = 2048; // minimum of DAC output value
+    int thres = 10;     // threshold for color change
+    // u1_printf("distance: %d cm\r\n", distance);
+    if (distance >= thres)
     {
-        // distance = 0;
-        get_ultrasound();
-        u1_printf("distance: %d cm\r\n", distance);
-        delay_ms(200); // 这里需要足够的延时也是因为更新不是立即的：详见4
+        HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (distance > 2 * thres) ? 4095 : (distance - thres) * (4095 - DAC_min) / thres + DAC_min);
+        HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 0);
     }
+    else
+    {
+        HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (thres - distance) * (4095 - DAC_min) / thres + DAC_min);
+        HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
+    }
+    delay_ms(50);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
   }
   /* USER CODE END 3 */
 }
