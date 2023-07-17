@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -85,6 +86,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -96,6 +98,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    static int cnt = 1;
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    u1_printf("test: %d %f\r\n", cnt, 1.0/cnt);
+    cnt++;
+    HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
