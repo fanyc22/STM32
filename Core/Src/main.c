@@ -18,8 +18,12 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dac.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "delay.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -87,22 +91,28 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
+  MX_DAC_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_DAC_Start(&hdac, DAC_CHANNEL_1); // 使能DAC
+  delay_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_TIM_IC_Start(&htim1, TIM_CHANNEL_1);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    static int cnt = 1;
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    u1_printf("test: %d %f\r\n", cnt, 1.0/cnt);
-    cnt++;
-    HAL_Delay(500);
+    for (int i = 0; i < 10; ++i)
+    {
+        // distance = 0;
+        get_ultrasound();
+        u1_printf("distance: %d cm\r\n", distance);
+        delay_ms(200); // 这里需要足够的延时也是因为更新不是立即的：详见4
+    }
   }
   /* USER CODE END 3 */
 }

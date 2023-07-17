@@ -57,6 +57,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define Ultrasound_Trig_Pin GPIO_PIN_15
+#define Ultrasound_Trig_GPIO_Port GPIOB
+#define Ultrasound_Echo_Pin GPIO_PIN_8
+#define Ultrasound_Echo_GPIO_Port GPIOA
 #define LED_Pin GPIO_PIN_2
 #define LED_GPIO_Port GPIOD
 
