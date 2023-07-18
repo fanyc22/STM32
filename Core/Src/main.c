@@ -34,7 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define MAX_LEN 16
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -45,9 +45,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t u2_RX_Buf[MAX_LEN];
+uint8_t u2_RX_ReceiveBit;
+int rx_len = 0;
 /* USER CODE END PV */
-
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
@@ -91,7 +92,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_UART_Receive_DMA(&huart2, u2_RX_Buf, RX_BUF_LEN);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -99,13 +100,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
-    static int cnt = 1;
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    u1_printf("test: %d %f\r\n", cnt, 1.0/cnt);
-    cnt++;
-    HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }

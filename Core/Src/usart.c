@@ -216,7 +216,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void u1_printf(char* fmt, ...) {
+void u1_printf(char *fmt, ...)
+{
   uint16_t len;
   va_list ap;
   va_start(ap, fmt);
@@ -226,4 +227,26 @@ void u1_printf(char* fmt, ...) {
   len = strlen((char*)buf);
   HAL_UART_Transmit(&huart1, buf, len, HAL_MAX_DELAY);
 }
+
+void u2_printf(char *fmt, ...)
+{
+  uint16_t len;
+  va_list ap;
+  va_start(ap, fmt);
+  uint8_t buf[200];
+  vsprintf((char*)buf, fmt, ap);
+  va_end(ap);
+  len = strlen((char*)buf);
+  HAL_UART_Transmit(&huart2, buf, len, HAL_MAX_DELAY);
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
+    u1_printf("received verification code:");
+    HAL_UART_Transmit(&huart1, u2_RX_Buf, RX_BUF_LEN, HAL_MAX_DELAY);
+    u2_printf("received verification code:");
+    HAL_UART_Transmit(&huart2, u2_RX_Buf, RX_BUF_LEN, HAL_MAX_DELAY);
+    HAL_UART_Receive_DMA(&huart2, u2_RX_Buf, RX_BUF_LEN);
+}
+
 /* USER CODE END 1 */
+
