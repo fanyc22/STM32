@@ -72,7 +72,7 @@ void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
+  huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -241,12 +241,12 @@ void u2_printf(char *fmt, ...)
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
-    u1_printf("received verification code:");
-    HAL_UART_Transmit(&huart1, u2_RX_Buf, RX_BUF_LEN, HAL_MAX_DELAY);
-    u2_printf("received verification code:");
-    HAL_UART_Transmit(&huart2, u2_RX_Buf, RX_BUF_LEN, HAL_MAX_DELAY);
+    if(u2_RX_Buf[0]=='0')
+    {
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+    }
+    u2_printf("RECEIVE!\r\n");
     HAL_UART_Receive_DMA(&huart2, u2_RX_Buf, RX_BUF_LEN);
 }
 
 /* USER CODE END 1 */
-

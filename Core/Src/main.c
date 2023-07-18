@@ -49,6 +49,7 @@ uint8_t u2_RX_Buf[MAX_LEN];
 uint8_t u2_RX_ReceiveBit;
 int rx_len = 0;
 /* USER CODE END PV */
+
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
@@ -100,6 +101,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
