@@ -93,7 +93,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_UART_Receive_DMA(&huart2, u2_RX_Buf, RX_BUF_LEN);
+//   HAL_UART_Receive_DMA(&huart2, u2_RX_Buf, RX_BUF_LEN);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -103,6 +103,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    static int i = 0;
+    u2_printf("%d,%d,%d,%d\r\n", i, 2 * i, 3 * i,4*i);
+    i++;
+    HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }

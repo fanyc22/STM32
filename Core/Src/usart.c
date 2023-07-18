@@ -240,13 +240,13 @@ void u2_printf(char *fmt, ...)
   HAL_UART_Transmit(&huart2, buf, len, HAL_MAX_DELAY);
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
-    if(u2_RX_Buf[0]=='0')
-    {
-    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    }
-    u2_printf("RECEIVE!\r\n");
-    HAL_UART_Receive_DMA(&huart2, u2_RX_Buf, RX_BUF_LEN);
-}
+//void HAL_UART_RxCpltCallback(UART_HandleTypeDef* huart) {
+//    if(u2_RX_Buf[0]=='0')
+//    {
+//    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+//    }
+//    u2_printf("RECEIVE!\r\n");
+//    HAL_UART_Receive_DMA(&huart2, u2_RX_Buf, RX_BUF_LEN);
+//}
 
 /* USER CODE END 1 */
