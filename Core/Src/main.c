@@ -94,8 +94,8 @@ HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     int cnt = __HAL_TIM_GetCounter(&htim3);
     __HAL_TIM_SetCounter(&htim3, 0);
     float rnow = cnt / 10.8; // 这个参数建议自己手动测量一下，否则会有一定的误差
-    // u1_printf("%f,%f,%f\r\n", 10*i, rnow, rset);
-    u1_printf("%f,%f\r\n", rnow,rset);
+    u1_printf("%f,%f,%f\r\n", 10*i, rnow, rset);
+    // u1_printf("%f,%f\r\n", rnow,rset);
     float dr = rset - rnow;
     float pwm = pid(&pidparm, dr);
     __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, pwm);
