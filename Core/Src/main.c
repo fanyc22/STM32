@@ -87,14 +87,14 @@ float pid(pidstr *a,float dr)//用于更新PWM的占空比
 
 HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  static float i = 0.0;
-  i += 0.01;
+  static float i = -0.01;
   if (htim->Instance == TIM2)
   {
     int cnt = __HAL_TIM_GetCounter(&htim3);
     __HAL_TIM_SetCounter(&htim3, 0);
     float rnow = cnt / 10.8; // 这个参数建议自己手动测量一下，否则会有一定的误差
-    u1_printf("%f,%f,%f\r\n", 10*i, rnow, rset);
+    i += 0.01;
+    u1_printf("%f,%f,%f\r\n", i, rnow, rset);
     // u1_printf("%f,%f\r\n", rnow,rset);
     float dr = rset - rnow;
     float pwm = pid(&pidparm, dr);
