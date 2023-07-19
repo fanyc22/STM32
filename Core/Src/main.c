@@ -87,17 +87,18 @@ float pid(pidstr *a,float dr)//用于更新PWM的占空比
 
 HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-
-  u1_printf("hello\r\n");
- if(htim->Instance==TIM2)
- {
-  int cnt=__HAL_TIM_GetCounter(&htim3);
-  __HAL_TIM_SetCounter(&htim3, 0);
-  float rnow=cnt/10.8;//这个参数建议自己手动测量一下，否则会有一定的误差
-  u1_printf("%f,%f\r\n",rnow,rset);
-  float dr=rset-rnow;
-  float pwm=pid(&pidparm,dr);
-  __HAL_TIM_SetCompare(&htim1,TIM_CHANNEL_1, pwm);
+  static float i = 0.0;
+  i += 0.01;
+  if (htim->Instance == TIM2)
+  {
+    int cnt = __HAL_TIM_GetCounter(&htim3);
+    __HAL_TIM_SetCounter(&htim3, 0);
+    float rnow = cnt / 10.8; // 这个参数建议自己手动测量一下，否则会有一定的误差
+    // u1_printf("%f,%f,%f\r\n", 10*i, rnow, rset);
+    u1_printf("%f,%f\r\n", rnow,rset);
+    float dr = rset - rnow;
+    float pwm = pid(&pidparm, dr);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, pwm);
  }
 }
 /* USER CODE END 0 */
@@ -109,50 +110,50 @@ HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+ pidparm.Kd = 500;
+ pidparm.Ki = 15;
+ pidparm.Kp = 500;
+ pidparm.lr = 0;
+ pidparm.sum = 0;
 
-  /* USER CODE END 1 */
+ /* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+ /* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+ /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ HAL_Init();
 
-  /* USER CODE BEGIN Init */
-  
-  /* USER CODE END Init */
+ /* USER CODE BEGIN Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+ /* USER CODE END Init */
 
-  /* USER CODE BEGIN SysInit */
+ /* Configure the system clock */
+ SystemClock_Config();
 
-  /* USER CODE END SysInit */
+ /* USER CODE BEGIN SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_TIM1_Init();
-  MX_TIM2_Init();
-  MX_TIM3_Init();
-  MX_USART1_UART_Init();
-  /* USER CODE BEGIN 2 */
-  pidparm.Kd=500;
-  pidparm.Ki=15;
-  pidparm.Kp=500;
-  pidparm.lr=0;
-  pidparm.sum=0;
-  HAL_TIM_Base_Start_IT(&htim2);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
-  /* USER CODE END 2 */
+ /* USER CODE END SysInit */
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+ /* Initialize all configured peripherals */
+ MX_GPIO_Init();
+ MX_TIM1_Init();
+ MX_TIM2_Init();
+ MX_TIM3_Init();
+ MX_USART1_UART_Init();
+ /* USER CODE BEGIN 2 */
+
+ HAL_TIM_Base_Start_IT(&htim2);
+ HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+ HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
+ /* USER CODE END 2 */
+
+ /* Infinite loop */
+ /* USER CODE BEGIN WHILE */
+ while (1)
+ {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
   }
   /* USER CODE END 3 */
 }
