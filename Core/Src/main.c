@@ -18,7 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
+#include "usart.h"
 #include "gpio.h"
+#include "JY62.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -54,7 +57,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void jy62_Init(UART_HandleTypeDef* huart);
 /* USER CODE END 0 */
 
 /**
@@ -85,17 +88,28 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_USART2_UART_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  jy62_Init(&huart2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  SetBaud(115200);
+  SetHorizontal();
+  InitAngle();
+  Calibrate();
+  SleepOrAwake();
   while (1)
   {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
+    float roll = GetRoll();
+    float pitch = GetPitch();
+    float yaw = GetYaw();
+    u1_printf("ROW: %f, PITCH:%f, YAW:%f\r\n", roll, pitch, yaw);
   }
   /* USER CODE END 3 */
 }
