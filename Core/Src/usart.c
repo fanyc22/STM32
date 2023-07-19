@@ -21,7 +21,9 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -115,5 +117,14 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
+void u1_printf(char* fmt, ...) {
+  uint16_t len;
+  va_list ap;
+  va_start(ap, fmt);
+  uint8_t buf[200];
+  vsprintf((char*)buf, fmt, ap);
+  va_end(ap);
+  len = strlen((char*)buf);
+  HAL_UART_Transmit(&huart1, buf, len, HAL_MAX_DELAY);//若使用了其他UART通道，将对应通道（参数1）修改即可。该函数在（6.补充）中会进行说明。
+}
 /* USER CODE END 1 */
