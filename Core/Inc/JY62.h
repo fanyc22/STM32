@@ -26,7 +26,7 @@ void jy62_Init(UART_HandleTypeDef* huart);
 #ifndef JY62_H
 #define JY62_H
 #include "stm32f1xx_hal.h"
-#define JY62_MESSAGE_LENGTH 200 // 开大数组放置读入数据时，一个数据包横跨两次接受数据的情况
+#define JY62_MESSAGE_LENGTH 1000 // 开大数组放置读入数据时，一个数据包横跨两次接受数据的情况
 #define g 9.8                   // 定义重力加速度值
 
 // 加速度
